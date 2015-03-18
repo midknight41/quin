@@ -1,0 +1,42 @@
+{
+    "name": "quin",
+    "version": "0.0.1",
+    "description": "Dependency injector for Q Promise chains",
+    "author": {
+        "name": "Chad Macey",
+        "email": "chad_macey@hotmail.com"
+    },
+    "dependencies": {
+        "q": "^1.2.0"
+    },
+    "devDependencies": {
+        "nodeunit": "^0.9.0"
+    },
+    "main": "lib/quin.js",
+    "engines": {
+        "node": ">= 0.10.0"
+    },
+    "scripts": {
+        "test": "nodeunit lib/tests"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://github.com/midknight41/quin/LICENSE.txt"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/midknight41/quin"
+    },
+    "bugs": {
+        "url": "http://github.com/midknight41/quin/issues"
+    },
+    "keywords": [
+        "q",
+        "promise",
+        "promises",
+        "dependency",
+        "injection"
+    ]
+}
