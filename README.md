@@ -54,9 +54,10 @@ var del = Q.denodeify(deleteIt);
 //quin returns a promise proxy injecting the extra dependency
 var deleteMessage = quin.inject(del, messageService);
 
-//The purpose and the flow of the chain is easier to read now.
+//Now execute the promise chain
 getMessage(messageService)
   .then(validateMessage)
   .then(deleteMessage)
   .done();
 ```
+The purpose and the flow of the chain is easier to read now.
