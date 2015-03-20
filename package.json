@@ -1,6 +1,6 @@
 {
     "name": "quin",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Dependency injector for Q Promise chains",
     "author": {
         "name": "Chad Macey",

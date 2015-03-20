@@ -1,4 +1,35 @@
-﻿export function inject(promise: any, ...input: any[]): any {
+﻿import Q = require("q");
+
+export function denodeify(fnc: any, ...input: any[]): any {
+  var promise = Q.denodeify(fnc);
+  
+  return _inject(promise, input);
+}
+
+export function inject(promise: any, ...input: any[]): any {
+  return _inject(promise, input);
+}
+
+export function wrap(promise: any): any {
+
+  if (promise == null) return null;
+
+  var qt = new Quintainer(promise);
+  return qt.inject.bind(qt);
+}
+
+//export function all(promises: any[], ...input: any[]) {
+
+//  var mapped = promises.map(promise => {
+//    console.log(promise);
+//    return _inject(promise, input);
+//  });
+//  console.log(mapped[0], mapped[1]);
+//  return Q.all(promises);
+
+//}
+
+function _inject(promise: any, input: any[]): any {
 
   if (promise == null) return null;
 
@@ -13,14 +44,6 @@
   }
 
   return fnc;
-}
-
-export function wrap(promise: any): any {
-
-  if (promise == null) return null;
-
-  var qt = new Quintainer(promise);
-  return qt.inject.bind(qt);
 }
 
 class Quintainer {

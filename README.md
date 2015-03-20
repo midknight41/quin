@@ -40,7 +40,7 @@ function deleteIt(messageService, msg, cb) {
   });
 }
 ```
-But we'd rather use promises, so let's make some:
+But we'd rather use promises, so let's make some and let **quin** sort out the dependency:
 ```js
 var Q = require("q");
 var quin = require("quin");
@@ -60,4 +60,22 @@ getMessage(messageService)
   .then(deleteMessage)
   .done();
 ```
-The purpose and the flow of the chain is easier to read now.
+The purpose and the flow of the chain is easier to read now and the ```validateMessage``` promise is not tightly coupled to the preceeding promise.
+
+If you are *actually* starting from callbacks (instead of promises) the ```denodeify``` method is available on **quin** for convenience.
+
+```js
+var quin = require("quin");
+var messageService = require("./whatever");
+
+//get your promises
+var getMessage = quin.denodeify(getIt);
+var validateMessage = quin.denodeify(validateIt);
+var deleteMessage = quin.denodeify(deleteIt, messageService);
+
+//Now execute the promise chain
+getMessage(messageService)
+  .then(validateMessage)
+  .then(deleteMessage)
+  .done();
+```

@@ -43,7 +43,7 @@ var testGroup = {
     var one: any = Q.denodeify(oneInput);
     var expected = "value";
 
-    var hasTwo = quin.inject(Q.denodeify(returnsExtra), expected);
+    var hasTwo = quin.inject(Q.denodeify(verifyExtra), expected);
 
     one("in")
       .then(hasTwo)
@@ -72,7 +72,7 @@ var testGroup = {
     var one: any = Q.denodeify(oneInput);
     var expected = null;
 
-    var hasTwo = quin.inject(Q.denodeify(returnsExtra), expected);
+    var hasTwo = quin.inject(Q.denodeify(verifyExtra), expected);
 
     one("in")
       .then(hasTwo)
@@ -93,6 +93,59 @@ var testGroup = {
       .done(() => { test.done(); });
 
   },
+  "inject() returns a function that can be called at the base of a promise chain": function (test: nodeunit.Test): void {
+    var expected = "value";
+
+    var one: any = Q.denodeify(oneInput);
+    var two: any = quin.denodeify(verifyExtra, expected);
+
+    var newBase = quin.inject(one, "in");
+
+    newBase()
+      .then(two)
+      .done(() => { test.done(); });
+
+  },
+  "inject() returns a function that can be called at the base of a promise chain with a parameter": function (test: nodeunit.Test): void {
+    var expected = "value";
+
+    var one: any = Q.denodeify(oneInput);
+    var verify: any = quin.denodeify(verifyExtra, expected);
+
+    var newBase = quin.inject(one);
+
+    newBase("in")
+      .then(verify)
+      .done(() => { test.done(); });
+
+  },
+  "denodify() returns a promise if a standard callback is provided": function (test: nodeunit.Test): void {
+    var expected = "validated";
+
+    var one = quin.denodeify(oneInput);
+    var two = quin.denodeify(oneInput);
+    var verify = quin.denodeify(verifyChain, test, expected);
+
+    one(expected)
+      .then(two)
+      .then(verify)
+      .done();
+
+  },
+  //"all() injects dependency into all items in array": function (test: nodeunit.Test): void {
+  //  var expected = "validated";
+
+  //  var one = quin.denodeify(oneInput);
+  //  var promise = Q.denodeify(twoInputs);
+  //  var two = quin.all([promise, promise], "injected");
+  //  var verify = quin.denodeify(verifyChain, test, expected);
+
+  //  one(expected)
+  //    .then(two)
+  //    .then(verify)
+  //    .done();
+
+  //},
   "Input from the top of the chain gets to the bottom with wrap": function (test: nodeunit.Test): void {
 
     //plain promises
@@ -132,7 +185,7 @@ var testGroup = {
       .done();
   },
   "README example works": function (test: nodeunit.Test): void {
-    
+
     var messageService = new MockService();
     
     //plain old promises
@@ -147,7 +200,7 @@ var testGroup = {
     getMessage(messageService)
       .then(validateMessage)
       .then(deleteMessage)
-      .done(() => { test.done();});
+      .done(() => { test.done(); });
 
   }
 }
@@ -156,7 +209,6 @@ exports.activityTests = testGroup;
 
 //Test Functions
 function showResults(writer: Console, result: string, cb: (err) => void) {
-  writer.log("final", result);
   cb(null);
 }
 
@@ -173,12 +225,13 @@ function threeInputs(extra: string, more: string, input: string, cb: (err, data)
 }
 
 function verifyChain(test: nodeunit.Test, expected: string, actual: string, cb: (err, data) => void) {
+
   test.equal(expected, actual);
   test.done();
   cb(null, "");
 }
 
-function returnsExtra(extra: string, input: string, cb: (err, data) => void) {
+function verifyExtra(extra: string, input: string, cb: (err, data) => void) {
   cb(null, extra);
 }
 
